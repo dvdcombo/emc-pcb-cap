@@ -226,6 +226,17 @@ end
 %******DETERMINE GENERALIZED CAPACITANCE MATRIX WITH DIELECTRIC********* 
 CAP = CAP';
 CAP =inv(CAP);
+for I=1:N 
+    for J=1:N 
+        SUM=0;
+        for K=1:NCDIV
+            for M=1:NCDIV
+                SUM=SUM+CAP(K+(I-1)*NCDIV,M+(J-1)*NCDIV);
+            end
+        end
+        CGEN(I,J)=SUM*DELTA;
+    end
+end
       
       
       
