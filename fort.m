@@ -237,7 +237,41 @@ for I=1:N
         CGEN(I,J)=SUM*DELTA;
     end
 end
-      
+%C******DETERMINE TRANSMISSION-LINE CAPACITANCE MATRIX WITH DIELECTRIC*** 
+
+SUM=0;
+for I=1:N
+    for J=1:N
+    SUM=SUM+CGEN(I,J);
+    end
+   SUMCAP=SUM;
+end
+
+INDEXR=0;
+for I=1:N;
+       if(I==IREF)
+           break;
+           
+       else
+           INDEXR=INDEXR+1;
+           INDEXC=0;
+           for J=1:N
+            if(J==IREF)
+                break;
+            else
+                INDEXC=INDEXC+1;
+                SUMC=0;
+                SUMR=0;
+                for II=1:N
+                SUMC=SUMC+CGEN(II,J);
+                SUMR=SUMR+CGEN(I,II);
+                end
+            CAP(INDEXR,INDEXC)=CGEN(I,J)-SUMC*SUMR/SUMCAP;    
+            end
+            end
+
+       end
+end
       
       
       
