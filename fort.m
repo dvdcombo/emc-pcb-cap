@@ -44,7 +44,7 @@ input = dlmread('PCBIN.txt');
 %**********FILL A1**********************************************      
 DIST=0;
       for i2 = 1:NCDIV
-        A(1,i2)=PHI(DIST);
+        A(1,i2)=PHI(DIST,FAC,DELTA);
         A(i2,1)=A(1,i2); 
         DIST=DIST+DELTA;
       end
@@ -60,17 +60,17 @@ for ii = 2:N
     DIST=(ii-1)*(W+SEP);
     for jj=1:NCDIV
         XJM1=jj-1;
-        A(1,jj+(ii-1)*NCDIV)=PHI(DIST+XJM1*DELTA);
+        A(1,jj+(ii-1)*NCDIV)=PHI(DIST+XJM1*DELTA,FAC,DELTA);
         for jj1=2:NCDIV 
             XJM1=jj-1;
-            A(jj1,(ii-1)*NCDIV+1)=PHI(DIST-XJM1*DELTA);
+            A(jj1,(ii-1)*NCDIV+1)=PHI(DIST-XJM1*DELTA,FAC,DELTA);
             for jj2=2:NCDIV
                 XJM1 = jj2-1;
-                A(jj2,(ii-1)*NCDIV+1)=PHI(DIST-XJM1*DELTA);
+                A(jj2,(ii-1)*NCDIV+1)=PHI(DIST-XJM1*DELTA,FAC,DELTA);
                 for K = 2:NCDIV
-                    A(K,M+(I-1)*NCDIV)=A((K-1),(M-1)+(I-1)*NCDIV);
                     for M=K:NCDIV
-                        A(M,K+(I-1)*NCDIV)=A((M-1),(K-1)+(I-1)*NCDIV);
+                        A(K,M+(ii-1)*NCDIV)=A((K-1),(M-1)+(ii-1)*NCDIV);
+                        A(M,K+(ii-1)*NCDIV)=A((M-1),(K-1)+(ii-1)*NCDIV);
                     end
                 end
             end
@@ -97,11 +97,11 @@ for i =1:NM1
 end
 NM2=N-2;
 for i=1:NM2
-    NMI=N-(I+1);
+    NMI=N-(i+1);
     for j=1:NMI
         for K=1:NCDIV
             for L=1:NCDIV
-                A(K+(j+I)*NCDIV,L+j*NCDIV)=A(K+i*NCDIV,L);
+                A(K+(j+i)*NCDIV,L+j*NCDIV)=A(K+i*NCDIV,L);
             end
         end
     end
@@ -116,25 +116,25 @@ for i=1:N
         sum = 0;
         for K=1:NCDIV
             for M=1:NCDIV
-                SUM=SUM+CAP(K+(i-1)*NCDIV,M+(j-1)*NCDIV);
+                sum=sum+CAP(K+(i-1)*NCDIV,M+(j-1)*NCDIV);
             end
-        SUM=SUM+CAP(K+(i-1)*NCDIV,M+(j-1)*NCDIV);
+            sum=sum+CAP(K+(i-1)*NCDIV,M+(j-1)*NCDIV);
         end
     end
-    CGEN(i,j)=SUM*DELTA;     
+    CGEN(i,j)=sum*DELTA;     
 end
 %******DETERMINE TRANSMISSION-LINE CAPACITANCE AND INDUCTANCE*********** 
 %******MATRICES WITHOUT DIELECTRIC************************************** 
 sum=0;
 for i = 1:N
     for j=1:N
-        SUM=SUM+CGEN(i,j);
-        SUMCAP=SUM;
+        sum=sum+CGEN(i,j);
+        SUMCAP=sum;
     end
 end
 INDEXR=0;
 for i = 1:N
-    if i == iref
+    if i == IREF
         break
     else
         INDEXR=INDEXR+1 ;
@@ -167,7 +167,7 @@ INDUCT=CAP/V02;
 %******FILL A1********************************************************** 
 dist = 0;
 for i = 1:NCDIV
-    A(1,i)=PHIB(dist);
+    A(1,i)=PHIB(dist,FAC,DELTA,ER,T,N);
     A = A';
     dist=dist+DELTA;
 end
@@ -179,19 +179,19 @@ for i=2:NCDIV
 end
 %******FILL A2--AN******************************************************
 for i=2:N
-    dist=(I-1)*(W+SEP);
+    dist=(i-1)*(W+SEP);
     for j=1:NCDIV
         XJM1=(j-1);
-        A(1,j+(i-1)*NCDIV)=PHIB(dist+XJM1*DELTA);
+        A(1,j+(i-1)*NCDIV)=PHIB(dist+XJM1*DELTA,FAC,DELTA,ER,T,N);
     end
     for j = 2:NCDIV
         XJM1=(j-1);
-        A(j,(i-1)*NCDIV+1)=PHIB(DIST-XJM1*DELTA);
+        A(j,(i-1)*NCDIV+1)=PHIB(dist-XJM1*DELTA,FAC,DELTA,ER,T,N);
     end
     for K=2:NCDIV
         for M=2:NCDIV
-            A(K,M+(I-1)*NCDIV)=A((K-1),(M-1)+(i-1)*NCDIV); 
-            A(M,K+(I-1)*NCDIV)=A((M-1),(K-1)+(i-1)*NCDIV);
+            A(K,M+(i-1)*NCDIV)=A((K-1),(M-1)+(i-1)*NCDIV); 
+            A(M,K+(i-1)*NCDIV)=A((M-1),(K-1)+(i-1)*NCDIV);
         end
     end
 end
@@ -271,6 +271,4 @@ for I=1:N;
             end
 
        end
-end 
-      
-      
+end
