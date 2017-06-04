@@ -1,5 +1,4 @@
-# COMPUTING THE PUL PARAMETER MATRICES
-# OF PRINTED CIRCUIT BOARDS
+# COMPUTING THE PUL PARAMETER MATRICES OF PRINTED CIRCUIT BOARDS
 
 This code computes the per-unit-length parameter matrices for a printed circuit
 board consisting of N lands on one side of a dielectric substrate.
