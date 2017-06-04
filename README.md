@@ -5,7 +5,7 @@ board consisting of N lands on one side of a dielectric substrate.
 
 Prepared for the Introduction to Electromagnetic Compatility course
 
-given by Assoc. Prof. Bektas Colak
+taught by Assoc. Prof. Bektas Colak
 
 prepared by
 
